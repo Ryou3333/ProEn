@@ -1,8 +1,11 @@
 import cv2
 import mediapipe as mp
-
+import math
+#from scipy.spatial import distance
 #-----------------#
 #MediaPipeをコマンドプロンプトでpip installしていないとエラー出る
+#リンク↓↓
+#https://qiita.com/akira2768922/items/c660129cc45cce384e90
 #-----------------#
 
 # landmarkの繋がり表示用
@@ -21,6 +24,18 @@ hands = mp_hands.Hands(
     min_detection_confidence=0.7,   # 検出信頼度
     min_tracking_confidence=0.7     # 追跡信頼度
 )
+'''
+def distance(landmark):
+    landdis = distance.euclidean(landmark[0],landmark[8])
+    return round(landdis,3)
+'''
+def calcDistance(p0,p1):
+    a1 = p1.x - p0.x
+    a2 = p1.y - p0.y
+    return math.sqrt(a1*a1+a2*a2)
+
+#def calcAngle(p0,p1,p2):
+#def detectFingerPose(landmarks):
 
 cap = cv2.VideoCapture(0)   # カメラのID指定
 if cap.isOpened():
@@ -32,6 +47,9 @@ if cap.isOpened():
         img = cv2.flip(img, 1)          # 画像を左右反転
         img_h, img_w, _ = img.shape     # サイズ取得
 
+        #あああ
+        #point = calcDistance(hand_landmarks.landmark[0],hand_landmarks.landmark[8])
+        #あああ
         # 検出処理の実行
         results = hands.process(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
         if results.multi_hand_landmarks:
@@ -39,7 +57,7 @@ if cap.isOpened():
             for h_id, hand_landmarks in enumerate(results.multi_hand_landmarks):
 
                 # landmarkの繋がりをlineで表示
-                for line_id in landmark_line_ids:
+                for line_id in landmark_line_ids:#line_idが(0,1)的な表示、landmark_line_idsが
                     # 1点目座標取得
                     lm = hand_landmarks.landmark[line_id[0]]
                     lm_pos1 = (int(lm.x * img_w), int(lm.y * img_h))
@@ -48,6 +66,9 @@ if cap.isOpened():
                     lm_pos2 = (int(lm.x * img_w), int(lm.y * img_h))
                     # line描画
                     cv2.line(img, lm_pos1, lm_pos2, (128, 0, 0), 1)
+                    #デバッグ用のprint
+                    #print(line_id)
+                    #print(landmark_line_ids)
 
                 # landmarkをcircleで表示
                 z_list = [lm.z for lm in hand_landmarks.landmark]
@@ -75,7 +96,13 @@ if cap.isOpened():
                 # - テキスト出力
                 for cnt, text in enumerate(hand_texts):
                     cv2.putText(img, text, (lm_x, lm_y + 10 * cnt), font, 0.3, lm_c, 1)
+                #テキスト表示
+                #dis = distance(hand_landmarks.landmark)
 
+                #cv2.putText(img,"Sleepy eyes. Wake up!",
+                #    (10,180), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
+                cv2.putText(img,"hands:{}".format(hand_landmarks.landmark[6]),
+                    (10,180), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
         # 画像の表示
         cv2.imshow("MediaPipe Hands", img)
         key = cv2.waitKey(1) & 0xFF
