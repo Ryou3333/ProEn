@@ -35,3 +35,8 @@ class Application(tk.Frame):
         self.q_labe2.grid(row=0, column=1)
         self.ans_label = tk.Label(self, text="解答：", font=("",20))
         self.ans_label.grid(row=1, column=0)
+
+
+"""
+_init_のアンダーバーを__init__にしたら動いた（アンダーバー2つと2つ）
+"""
