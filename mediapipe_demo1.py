@@ -1,13 +1,14 @@
 import cv2
 import mediapipe as mp
 import math
-#from scipy.spatial import distance
+"""
+#from scipy.spatial import distance(いらない)
 #-----------------#
 #MediaPipeをコマンドプロンプトでpip installしていないとエラー出る
 #リンク↓↓
 #https://qiita.com/akira2768922/items/c660129cc45cce384e90
 #-----------------#
-
+"""
 # landmarkの繋がり表示用
 landmark_line_ids = [
     (0, 1), (1, 5), (5, 9), (9, 13), (13, 17), (17, 0),  # 掌
@@ -24,18 +25,11 @@ hands = mp_hands.Hands(
     min_detection_confidence=0.7,   # 検出信頼度
     min_tracking_confidence=0.7     # 追跡信頼度
 )
-'''
-def distance(landmark):
-    landdis = distance.euclidean(landmark[0],landmark[8])
-    return round(landdis,3)
-'''
-def calcDistance(p0,p1):
+
+def calcDistance(p0,p1):#2点間の距離
     a1 = p1.x - p0.x
     a2 = p1.y - p0.y
     return math.sqrt(a1*a1+a2*a2)
-
-#def calcAngle(p0,p1,p2):
-#def detectFingerPose(landmarks):
 
 cap = cv2.VideoCapture(0)   # カメラのID指定
 if cap.isOpened():
@@ -47,9 +41,6 @@ if cap.isOpened():
         img = cv2.flip(img, 1)          # 画像を左右反転
         img_h, img_w, _ = img.shape     # サイズ取得
 
-        #あああ
-        #point = calcDistance(hand_landmarks.landmark[0],hand_landmarks.landmark[8])
-        #あああ
         # 検出処理の実行
         results = hands.process(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
         if results.multi_hand_landmarks:
@@ -101,17 +92,40 @@ if cap.isOpened():
 
                 #cv2.putText(img,"Sleepy eyes. Wake up!",
                 #    (10,180), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
-                dis = calcDistance(hand_landmarks.landmark[0],hand_landmarks.landmark[6])
                 """
                 cv2.putText(img,"hands:{}".format(dis),
+                (10,180), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
+
+                thumb=0#親指
+                index_finger=0#人差し指
+                middleFinger=0#中指
+                third_finger=0#薬指
+                pinky_finger=0#小指
+                """
+                index_finger_dis = calcDistance(hand_landmarks.landmark[0],hand_landmarks.landmark[8])
+                pinky_finger_dis = calcDistance(hand_landmarks.landmark[0],hand_landmarks.landmark[20])
+
+                #確認用（format()の中に上↑のdisを代入すると確認できます）
+                cv2.putText(img,"hands:{}".format(index_finger_dis),
                     (10,180), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
                 """
-                if(dis < 0.4):
+                確認したところ、
+                (index_finger_dis < 0.35 and pinky_finger_dis < 0.3)でグー
+                (index_finger_dis > 0.35 and pinky_finger_dis < 0.3)でチョキ
+                (index_finger_dis > 0.35 and pinky_finger_dis > 0.3)でパー
+                """
+
+                #画面にグーチョキパーを表示（日本語は？？？になるのでローマ字）
+                if(index_finger_dis < 0.35 and pinky_finger_dis < 0.3):
                     cv2.putText(img,"hands:gu",
-                        (10,180), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
-                if(dis > 0.4):
+                        (30,30), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
+                elif(index_finger_dis > 0.35 and pinky_finger_dis < 0.3):
+                    cv2.putText(img,"hands:tyoki",
+                        (30,30), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
+                elif(index_finger_dis > 0.35 and pinky_finger_dis > 0.3):
                     cv2.putText(img,"hands:paa",
-                        (10,180), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
+                        (30,30), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
+                        
         # 画像の表示
         cv2.imshow("MediaPipe Hands", img)
         key = cv2.waitKey(1) & 0xFF
