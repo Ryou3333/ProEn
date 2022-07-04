@@ -4,12 +4,15 @@ import tkinter as tk
 class Application(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
+        self.pack()
 
         self.master.geometry("700x700")
         self.master.title("一文字タイピング")
 
         self.create_widgets()
 
+    def end():
+        root.destroy()
 
     def create_widgets(self):
         """
@@ -24,6 +27,10 @@ class Application(tk.Frame):
         self.q_label.configure(width = 500, height = 500)#サイズ
         self.q_label.grid_propagate(0)
 
+        self.button = tk.Button(self, text="a")
+        self.button.place(x=100,y=370,width=100,height=50)
+        self.button.pack()
+
         self.q_label2 = tk.Label(self, text="tkinter", width=5, anchor="w", font=("",20))
 
         self.ans_label = tk.Label(self, text="解答：", font=("",20))
@@ -32,10 +39,23 @@ class Application(tk.Frame):
         self.canvas1.configure(width = 10, height = 10)
         self.canvas1.grid(column = 0, row = 0, padx = 10, pady = 10)
 
+        #self.button = tk.Button(self.master,text='終了', font=("Meiryo", "12", "normal"), command = end)
+        #self.button.place(x=100,y=370,width=100,height=50)
+
+
+
+
+
+
+
+
+
+
 
 def main():
     root = tk.Tk()
     app = Application(master=root)#Inherit
+
     app.mainloop()
 
 if __name__ == "__main__":

@@ -101,8 +101,17 @@ if cap.isOpened():
 
                 #cv2.putText(img,"Sleepy eyes. Wake up!",
                 #    (10,180), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
-                cv2.putText(img,"hands:{}".format(hand_landmarks.landmark[6]),
+                dis = calcDistance(hand_landmarks.landmark[0],hand_landmarks.landmark[6])
+                """
+                cv2.putText(img,"hands:{}".format(dis),
                     (10,180), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
+                """
+                if(dis < 0.4):
+                    cv2.putText(img,"hands:gu",
+                        (10,180), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
+                if(dis > 0.4):
+                    cv2.putText(img,"hands:paa",
+                        (10,180), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
         # 画像の表示
         cv2.imshow("MediaPipe Hands", img)
         key = cv2.waitKey(1) & 0xFF
