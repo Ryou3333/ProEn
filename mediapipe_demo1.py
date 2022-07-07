@@ -125,7 +125,7 @@ if cap.isOpened():
                 elif(index_finger_dis > 0.35 and pinky_finger_dis > 0.3):
                     cv2.putText(img,"hands:paa",
                         (30,30), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 3, 1)
-                        
+
         # 画像の表示
         cv2.imshow("MediaPipe Hands", img)
         key = cv2.waitKey(1) & 0xFF
