@@ -8,7 +8,6 @@ import math
 import threading
 import winsound
 
-
 janken = [0,1,2]#いらない
 
 
