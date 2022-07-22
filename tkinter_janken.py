@@ -20,7 +20,7 @@ landmark_line_ids = [
     (17, 18), (18, 19), (19, 20),   # 小指
 ]
 
-mp_hands = mp.solutions.hands
+mp_hands = mediapipe.solutions.hands
 hands = mp_hands.Hands(
     max_num_hands=2,                # 最大検出数
     min_detection_confidence=0.7,   # 検出信頼度
