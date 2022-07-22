@@ -3,7 +3,8 @@ import tkinter as tk
 import random
 import time
 import sys
-import mediapipe as mp
+from mediapipe import *
+#import mediapipe as mp
 import math
 import threading
 import winsound

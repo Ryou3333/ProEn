@@ -3,7 +3,8 @@ import tkinter as tk
 import random
 import time
 import sys
-import mediapipe as mp
+from mediapipe import *
+#import mediapipe as mp
 import math
 import threading
 import winsound
@@ -19,7 +20,7 @@ landmark_line_ids = [
     (17, 18), (18, 19), (19, 20),   # 小指
 ]
 
-mp_hands = mp.solutions.hands
+mp_hands = mediapipe.solutions.hands
 hands = mp_hands.Hands(
     max_num_hands=2,                # 最大検出数
     min_detection_confidence=0.7,   # 検出信頼度
@@ -39,8 +40,8 @@ class Application(tk.Frame):
         self.img_front = tk.PhotoImage(file = "dataset/front.png", width = 500, height = 500)
         self.img_up = tk.PhotoImage(file = "dataset/up.png", width = 500, height = 500)
         self.img_down = tk.PhotoImage(file = "dataset/down.png", width = 500, height = 500)
-        self.img_left = tk.PhotoImage(file = "dataset/left.png", width = 500, height = 500)
         self.img_right = tk.PhotoImage(file = "dataset/right.png", width = 500, height = 500)
+        self.img_left = tk.PhotoImage(file = "dataset/left.png", width = 500, height = 500)
 
         self.create_widgets()
 
