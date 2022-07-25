@@ -47,23 +47,32 @@ class GUI_Main(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.canvas1 = tk.Canvas(self.master, bg = "#deb887", height = 300, width = 300)
+        self.canvas1 = tk.Canvas(self.master, bg = "skyblue", height = 700, width = 700)
         self.canvas1.place(x=0,y=0)
 
-        self.EndButton = tk.Button(self.master, text = '終わる', width = 0, height = 0, command = self.end_button)
+        self.EndButton = tk.Button(self.master, text = 'ゲームおしまい', width = 0, height = 0, command = self.end_button)
         self.EndButton.place(x=40)
 
-        self.GoJanken = tk.Button(self.master, text = 'じゃんけん', width = 0, height = 0, command = self.Go_Janken)
-        self.GoJanken.place(x=100,y=100)
+        self.ScoreBtton = tk.Button(self.master, text = 'スコア画面', width = 0, height = 0, command = self.Score_button)
+        self.ScoreBtton.place(x=600)
 
-        self.GoAtti = tk.Button(self.master, text = 'あっちむいてほい', width = 0, height = 0, command = self.Go_Atti)
-        self.GoAtti.place(x=100,y=200)
+        self.GoJanken = tk.Button(self.master, text = 'じゃんけん', width = 90, height = 5, command = self.Go_Janken)
+        self.GoJanken.place(x=30,y=100)
 
-        self.GoTyping = tk.Button(self.master, text = '1文字タイピング', width = 0, height = 0, command = self.Go_Typing)
-        self.GoTyping.place(x=100,y=300)
+        self.GoAtti = tk.Button(self.master, text = 'あっちむいてほい', width = 90, height = 5, command = self.Go_Atti)
+        self.GoAtti.place(x=30,y=250)
 
-        self.GoFace = tk.Button(self.master, text = '顔文字ぴったん', width = 0, height = 0, command = self.Go_Face)
-        self.GoFace.place(x=100,y=400)
+        self.GoTyping = tk.Button(self.master, text = '1文字タイピング', width = 90, height = 5, command = self.Go_Typing)
+        self.GoTyping.place(x=30,y=400)
+
+        self.GoFace = tk.Button(self.master, text = '顔文字ぴったん', width = 90, height = 5, command = self.Go_Face)
+        self.GoFace.place(x=30,y=550)
+
+    def end_button(self):
+        sys.exit()
+
+    def Score_button(self):
+        GUI_Score(master = self.master)
 
     def Go_Janken(self):
         GUI_Janken(master = self.master)
@@ -71,6 +80,7 @@ class GUI_Main(tk.Frame):
 
     def Go_Atti(self):
         GUI_Atti(master = self.master)
+        self.destroy()
 
     def Go_Typing(self):
         GUI_Typing(master = self.master)
@@ -78,9 +88,25 @@ class GUI_Main(tk.Frame):
     def Go_Face(self):
         GUI_Face(master = self.master)
 
-    def end_button(self):
-        sys.exit()
 
+class GUI_Score(tk.Frame):
+    def __init__(self, master):
+        super().__init__(master)
+        self.pack()
+
+        self.master.geometry("700x700")
+        self.master.title("スコア画面")
+        self.create_widgets()
+
+    def create_widgets(self):
+        self.canvas1 = tk.Canvas(self.master, bg = "Green", height = 700, width = 700)
+        self.canvas1.place(x=0,y=0)
+        self.Back_Main = tk.Button(self.master, text = 'メイン画面に戻る', width = 0, height = 0, command = self.back_main_button)
+        self.Back_Main.place(x=40)
+
+    def back_main_button(self):
+        GUI_Score.destroy(self)#これで消えそう(消えなかった)
+        GUI_Main(master = self.master)
 
 class GUI_Janken(tk.Frame):
     def __init__(self, master):
@@ -105,7 +131,7 @@ class GUI_Janken(tk.Frame):
     def end():
         root.destroy()
 
-    def back_menu_button(self,event):
+    def back_main_button(self,event):
         self.cap.release()
         GUI_Main(master = self.master)
 
@@ -117,14 +143,14 @@ class GUI_Janken(tk.Frame):
 
     def create_widgets(self):
         global canvas1
-        self.canvas1 = tk.Canvas(self.master, bg = "#deb887", height = 300, width = 300)
+        self.canvas1 = tk.Canvas(self.master, bg = "#deb887", height = 700, width = 700)
         self.canvas1.place(x=0,y=0)
 
         self.canvas1.create_image(30,30,image='', anchor = tk.NW,tag ='im')
 
-        self.Button2 = tk.Button(self.master, text = 'メイン画面に戻る', width = 0, height = 0)
-        self.Button2.place(x=40)
-        self.Button2.bind("<Button-1>",self.back_menu_button)
+        self.Back_Main = tk.Button(self.master, text = 'メイン画面に戻る', width = 0, height = 0)
+        self.Back_Main.place(x=40)
+        self.Back_Main.bind("<Button-1>",self.back_main_button)
         self.Button3 = tk.Button(self.master, text = 'ゲームスタートボタン', width = 0, height = 0)
         self.Button3.place(x=100)
         self.Button3.bind("<Button-1>",self.start_timer)
@@ -297,7 +323,7 @@ class GUI_Atti(tk.Frame):
     def end():
         root.destroy()
 
-    def back_menu_button(self,event):
+    def back_main_button(self,event):
         self.cap.release()
         GUI_Main(master = self.master)
 
@@ -309,14 +335,14 @@ class GUI_Atti(tk.Frame):
 
     def create_widgets(self):
         global canvas1
-        self.canvas1 = tk.Canvas(self.master, bg = "#deb887", height = 300, width = 300)
+        self.canvas1 = tk.Canvas(self.master, bg = "#deb887", height = 700, width = 700)
         self.canvas1.place(x=0,y=0)
 
         self.canvas1.create_image(30,30,image=self.img_front, anchor = tk.NW,tag ='im')
 
-        self.Button2 = tk.Button(self.master, text = 'メイン画面に戻る', width = 0, height = 0)
-        self.Button2.place(x=40)
-        self.Button2.bind("<Button-1>",self.back_menu_button)
+        self.Back_Main = tk.Button(self.master, text = 'メイン画面に戻る', width = 0, height = 0)
+        self.Back_Main.place(x=40)
+        self.Back_Main.bind("<Button-1>",self.back_main_button)
         self.Button3 = tk.Button(self.master, text = 'ゲームスタートボタン', width = 0, height = 0)
         self.Button3.place(x=100)
         self.Button3.bind("<Button-1>",self.start_timer)
@@ -445,7 +471,7 @@ class GUI_Typing(tk.Frame):
         super().__init__(master)
         self.pack()
 
-        master.geometry("600x400")
+        master.geometry("700x700")
         master.title("一文字タイピング")
 
         #問題数インデックス
@@ -555,7 +581,7 @@ class GUI_Face(tk.Frame):
     def end():
         root.destroy()
 
-    def back_menu_button(self,event):
+    def back_main_button(self,event):
         self.cap.release()
         GUI_Main(master = self.master)
 
@@ -568,14 +594,14 @@ class GUI_Face(tk.Frame):
 
     def create_widgets(self):
         global canvas1
-        self.canvas1 = tk.Canvas(self.master, bg = "#deb887", height = 300, width = 300)
+        self.canvas1 = tk.Canvas(self.master, bg = "#deb887", height = 700, width = 700)
         self.canvas1.place(x=0,y=0)
 
         self.canvas1.create_image(30,30,image='', anchor = tk.NW,tag ='im')
 
-        self.Button2 = tk.Button(self.master, text = '終わる', width = 0, height = 0)
-        self.Button2.place(x=40)
-        self.Button2.bind("<Button-1>",self.back_menu_button)
+        self.Back_Main = tk.Button(self.master, text = '終わる', width = 0, height = 0)
+        self.Back_Main.place(x=40)
+        self.Back_Main.bind("<Button-1>",self.back_main_button)
         self.Button3 = tk.Button(self.master, text = 'ゲームスタートボタン', width = 0, height = 0)
         self.Button3.place(x=100)
         self.Button3.bind("<Button-1>",self.start_timer)
