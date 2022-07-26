@@ -3,7 +3,8 @@ import tkinter as tk
 import random
 import time
 import sys
-import mediapipe as mp
+from mediapipe import *
+#import mediapipe as mp
 import math
 import threading
 import winsound
@@ -19,7 +20,7 @@ landmark_line_ids = [
     (17, 18), (18, 19), (19, 20),   # 小指
 ]
 
-mp_hands = mp.solutions.hands
+mp_hands = mediapipe.solutions.hands
 hands = mp_hands.Hands(
     max_num_hands=2,                # 最大検出数
     min_detection_confidence=0.7,   # 検出信頼度
@@ -37,9 +38,9 @@ class Application(tk.Frame):
         global JANKEN_EVENT_TIMES,index,janken_game_count,win_count,confirm_count,start_count,img,img_gu,img_pa,img_choki,aiko_flag
         JANKEN_EVENT_TIMES = 10 #じゃんけん回数をいじれる
 
-        self.img_gu = tk.PhotoImage(file = "gu.png", width = 500, height = 500)
-        self.img_choki = tk.PhotoImage(file = "choki.png", width = 500, height = 500)
-        self.img_pa = tk.PhotoImage(file = "pa.png", width = 500, height = 500)
+        self.img_gu = tk.PhotoImage(file = "dataset/gu.png", width = 500, height = 500)
+        self.img_choki = tk.PhotoImage(file = "dataset/.png", width = 500, height = 500)
+        self.img_pa = tk.PhotoImage(file = "dataset/pa.png", width = 500, height = 500)
 
         self.create_widgets()
 
@@ -135,11 +136,11 @@ class Application(tk.Frame):
 
     def playsound(self):
         if self.aiko_flag == 0:
-            sound = lambda: winsound.PlaySound("jankenpon_01.wav", winsound.SND_FILENAME)
+            sound = lambda: winsound.PlaySound("dataset/jankenpon_01.wav", winsound.SND_FILENAME)
             thread_playsound_jankenpon = threading.Thread(target = sound)
             thread_playsound_jankenpon.start()
         else:
-            sound = lambda: winsound.PlaySound("aikodesho_01.wav", winsound.SND_FILENAME)
+            sound = lambda: winsound.PlaySound("dataset/aikodesho_01.wav", winsound.SND_FILENAME)
             thread_playsound_aiko = threading.Thread(target = sound)
             thread_playsound_aiko.start()
             self.aiko_flag = 0

@@ -3,7 +3,8 @@ import tkinter as tk
 import random
 import time
 import sys
-import mediapipe as mp
+from mediapipe import *
+#import mediapipe as mp
 import math
 import threading
 import winsound
@@ -19,7 +20,7 @@ landmark_line_ids = [
     (17, 18), (18, 19), (19, 20),   # 小指
 ]
 
-mp_hands = mp.solutions.hands
+mp_hands = mediapipe.solutions.hands
 hands = mp_hands.Hands(
     max_num_hands=2,                # 最大検出数
     min_detection_confidence=0.7,   # 検出信頼度
@@ -36,11 +37,11 @@ class Application(tk.Frame):
 
         global ATTI_EVENT_TIMES,index,atti_game_count,win_count,confirm_count,start_count,img,img_front,img_up,img_down,img_left,img_right
         ATTI_EVENT_TIMES = 10
-        self.img_front = tk.PhotoImage(file = "front.png", width = 500, height = 500)
-        self.img_up = tk.PhotoImage(file = "up.png", width = 500, height = 500)
-        self.img_down = tk.PhotoImage(file = "down.png", width = 500, height = 500)
-        self.img_left = tk.PhotoImage(file = "left.png", width = 500, height = 500)
-        self.img_right = tk.PhotoImage(file = "right.png", width = 500, height = 500)
+        self.img_front = tk.PhotoImage(file = "dataset/front.png", width = 500, height = 500)
+        self.img_up = tk.PhotoImage(file = "dataset/up.png", width = 500, height = 500)
+        self.img_down = tk.PhotoImage(file = "dataset/down.png", width = 500, height = 500)
+        self.img_right = tk.PhotoImage(file = "dataset/right.png", width = 500, height = 500)
+        self.img_left = tk.PhotoImage(file = "dataset/left.png", width = 500, height = 500)
 
         self.create_widgets()
 
@@ -132,7 +133,7 @@ class Application(tk.Frame):
             self.after(1,self.display_result)
 
     def playsound(self):
-        sound = lambda: winsound.PlaySound("atti.wav", winsound.SND_FILENAME)
+        sound = lambda: winsound.PlaySound("dataset/atti.wav", winsound.SND_FILENAME)
         thread_playsound_atti = threading.Thread(target = sound)
         thread_playsound_atti.start()
 
