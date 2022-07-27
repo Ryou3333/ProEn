@@ -286,8 +286,8 @@ class GUI_Janken(tk.Frame):
 
     def playsound(self):
         if self.aiko_flag == 0:
-            sound = lambda: winsound.PlaySound("dataset/jankenpon_01.wav", winsound.SND_FILENAME)
-            thread_playsound_jankenpon = threading.Thread(target = sound)
+            janken_sound = lambda: winsound.PlaySound("dataset/jankenpon_01.wav", winsound.SND_FILENAME)
+            thread_playsound_jankenpon = threading.Thread(target = janken_sound)
             thread_playsound_jankenpon.start()
         else:
             sound = lambda: winsound.PlaySound("dataset/aikodesho_01.wav", winsound.SND_FILENAME)
