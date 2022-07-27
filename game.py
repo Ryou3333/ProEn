@@ -16,16 +16,21 @@ from scipy.spatial import distance
 import openpyxl as xl
 
 
+
 landmark_line_ids = [(0, 1), (1, 5), (5, 9), (9, 13), (13, 17), (17, 0),(1, 2), (2, 3), (3, 4), (5, 6), (6, 7), (7, 8),(9, 10), (10, 11), (11, 12), (13, 14), (14, 15), (15, 16), (17, 18), (18, 19), (19, 20)]
 
 mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(max_num_hands=2,min_detection_confidence=0.7,min_tracking_confidence=0.7)
+hands = mp_hands.Hands(
+    max_num_hands=2,                # 最大検出数
+    min_detection_confidence=0.7,   # 検出信頼度
+    min_tracking_confidence=0.7     # 追跡信頼度
+)
 
 QUESTION = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
             "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 
 def write_score(num,score):
-    wb = xl.load_workbook("score.xlsx")
+    wb = xl.load_workbook("dataset/score.xlsx")
     sheet = wb.active
     if num == 0:
         high_score = sheet["C2"].value
@@ -45,7 +50,7 @@ def write_score(num,score):
         high_score = sheet["C2"].value
         if score > high_score:
             sheet["D2"].value = score
-    wb.save("score.xlsx")
+    wb.save("dataset/score.xlsx")
     wb.close()
 
 class GUI_Main(tk.Frame):
@@ -149,7 +154,7 @@ class GUI_Score(tk.Frame):
 
     def score_load(self):
         global Janken_high_score,Atti_high_score,Typing_high_score,Face_high_score
-        wb = xl.load_workbook("score.xlsx")
+        wb = xl.load_workbook("dataset/score.xlsx")
         sheet = wb.active
         Janken_high_score = int(sheet["A2"].value)
         Atti_high_score = int(sheet["B2"].value)
@@ -162,13 +167,13 @@ class GUI_Score(tk.Frame):
         GUI_Main(master = self.master)
 
     def score_reset(self):
-        wb = xl.load_workbook("score.xlsx")
+        wb = xl.load_workbook("dataset/score.xlsx")
         sheet = wb.active
         sheet["A2"].value = 0
         sheet["B2"].value = 0
         sheet["C2"].value = 0
         sheet["D2"].value = 0
-        wb.save("score.xlsx")
+        wb.save("dataset/score.xlsx")
         wb.close()
 
 class GUI_Janken(tk.Frame):
