@@ -33,11 +33,11 @@ def write_score(num,score):
     wb = xl.load_workbook("dataset/score.xlsx")
     sheet = wb.active
     if num == 0:
-        high_score = sheet["C2"].value
+        high_score = sheet["A2"].value
         if score > high_score:
             sheet["A2"].value = score
     if num == 1:
-        high_score = sheet["C2"].value
+        high_score = sheet["B2"].value
         if score > high_score:
             sheet["B2"].value = score
     if num == 2:
@@ -47,7 +47,7 @@ def write_score(num,score):
         elif score < high_score:
             sheet["C2"].value = score
     if num == 3:
-        high_score = sheet["C2"].value
+        high_score = sheet["D2"].value
         if score > high_score:
             sheet["D2"].value = score
     wb.save("dataset/score.xlsx")
