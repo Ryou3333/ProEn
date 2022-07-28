@@ -21,9 +21,9 @@ landmark_line_ids = [(0, 1), (1, 5), (5, 9), (9, 13), (13, 17), (17, 0),(1, 2), 
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
-    max_num_hands=2,                # 最大検出数
-    min_detection_confidence=0.7,   # 検出信頼度
-    min_tracking_confidence=0.7     # 追跡信頼度
+    max_num_hands=2,
+    min_detection_confidence=0.7,
+    min_tracking_confidence=0.7
 )
 
 QUESTION = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
@@ -56,7 +56,6 @@ def write_score(num,score):
 class GUI_Main(tk.Frame):
     def __init__(self,master):
         super().__init__(master)
-        #self.pack()
 
         self.master.geometry("700x700")
         self.master.title("メイン画面")
@@ -163,7 +162,6 @@ class GUI_Score(tk.Frame):
         wb.close()
 
     def back_main_button(self):
-        #GUI_Score.destroy(self)#これで消えそう(消えなかった)
         GUI_Main(master = self.master)
 
     def score_reset(self):
@@ -185,7 +183,7 @@ class GUI_Janken(tk.Frame):
         self.master.title("じゃんけん")
 
         global JANKEN_EVENT_TIMES,index,janken_game_count,win_count,confirm_count,start_count,img,img_gu,img_pa,img_choki,aiko_flag
-        JANKEN_EVENT_TIMES = 10 #じゃんけん回数をいじれる
+        JANKEN_EVENT_TIMES = 10
 
         self.img_gu = tk.PhotoImage(file = "dataset/gu.png", width = 500, height = 500)
         self.img_choki = tk.PhotoImage(file = "dataset/choki.png", width = 500, height = 500)
@@ -194,7 +192,6 @@ class GUI_Janken(tk.Frame):
         self.create_widgets()
 
         self.cap = cv2.VideoCapture(0)
-        #self.capread()#処理を速くするために事前にreadしておく
 
     def end():
         root.destroy()
@@ -257,7 +254,7 @@ class GUI_Janken(tk.Frame):
         self.text5.set("")
 
     def start_timer(self,event):
-        self.start_state()#初期化
+        self.start_state()
         self.text1.set("勝った回数は："+ str(self.win_count)+"　/　勝負回数は：" + str(self.janken_game_count))
         self.playsound()
         self.after(1700,self.random_img)
@@ -308,7 +305,7 @@ class GUI_Janken(tk.Frame):
 
     def random_img(self):
         self.index = random.randint(0,2)
-        self.canvas1.delete('im')#一旦削除してimgを上書き
+        self.canvas1.delete('im')
         if self.index == 0:
             self.canvas1.create_image(30,30,image=self.img_gu, anchor = tk.NW,tag = 'im')
         elif self.index == 1:
@@ -316,14 +313,13 @@ class GUI_Janken(tk.Frame):
         else:
             self.canvas1.create_image(30,30,image=self.img_pa, anchor = tk.NW,tag = 'im')
 
-    def janken(self):#mediapipe
+    def janken(self):
         self.success, self.media_img = self.cap.read()
-        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('H', '2', '6', '4')); #高速化（あまり意味ない？
+        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('H', '2', '6', '4'));
         self.media_img = cv2.flip(self.media_img, 1)
         self.results = hands.process(cv2.cvtColor(self.media_img, cv2.COLOR_BGR2RGB))
         self.text2.set("読み取れませんでした。もう一度やり直してください")
         if self.results.multi_hand_landmarks:
-            # 検出した手の数分繰り返し
             for self.h_id, self.hand_landmarks in enumerate(self.results.multi_hand_landmarks):
                 def calcDistance(p0,p1):
                     a1 = p1.x - p0.x
@@ -386,7 +382,7 @@ class GUI_Atti(tk.Frame):
         self.create_widgets()
 
         self.cap = cv2.VideoCapture(0)
-        self.capread()#処理を軽くするために事前にreadしておく
+        self.capread()
 
 
     def end():
@@ -449,7 +445,7 @@ class GUI_Atti(tk.Frame):
 
 
     def start_timer(self,event):
-        self.start_state()#初期化
+        self.start_state()
         self.text1.set("指が合った回数は："+ str(self.win_count)+"　/　勝負回数は：" + str(self.atti_game_count))
         self.playsound()
         self.after(1400,self.random_img)
@@ -490,7 +486,7 @@ class GUI_Atti(tk.Frame):
 
     def random_img(self):
         self.index = random.randint(0,3)
-        self.canvas1.delete('im')#一旦削除してimgを上書き
+        self.canvas1.delete('im')
         if self.index == 0:
             self.canvas1.create_image(30,30,image=self.img_up, anchor = tk.NW,tag = 'im')
         elif self.index == 1:
@@ -500,14 +496,13 @@ class GUI_Atti(tk.Frame):
         else:
             self.canvas1.create_image(30,30,image=self.img_right, anchor = tk.NW,tag = 'im')
 
-    def atti(self):#mediapipe
+    def atti(self):
         self.success, self.media_img = self.cap.read()
-        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('H', '2', '6', '4')); #高速化（あまり意味ない？
+        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('H', '2', '6', '4'));
         self.media_img = cv2.flip(self.media_img, 1)
         self.results = hands.process(cv2.cvtColor(self.media_img, cv2.COLOR_BGR2RGB))
         self.text2.set("読み取れませんでした。")
         if self.results.multi_hand_landmarks:
-            # 検出した手の数分繰り返し
             for self.h_id, self.hand_landmarks in enumerate(self.results.multi_hand_landmarks):
                 self.x_index_finger = self.hand_landmarks.landmark[8].x
                 self.y_index_finger = self.hand_landmarks.landmark[8].y
@@ -544,23 +539,16 @@ class GUI_Typing(tk.Frame):
         master.geometry("700x700")
         master.title("一文字タイピング")
 
-        #問題数インデックス
         self.index = 0
         self.index2 = random.randint(0,25)
 
-        #正解数カウント用
         self.correct_cnt = 0
         self.start_button_flag = False
 
         self.create_widgets()
 
-        #経過時間スレッドの開始
-
-
-        #Tkインスタンスに対してキーイベント処理を実装
         self.master.bind("<KeyPress>", self.type_event)
 
-    #ウィジェットの生成と配置
     def create_widgets(self):
         self.canvas1 = tk.Canvas(self.master, bg = "#F0F0F0", height = 700, width = 700)
         self.canvas1.place(x=0,y=0)
@@ -575,7 +563,6 @@ class GUI_Typing(tk.Frame):
         self.result_label = tk.Label(self.master, text="", font=("",20))
         self.result_label.place(x=40,y=300)
 
-        #時間計測用のラベル
         self.time_label = tk.Label(self.master, text="", font=("",20))
         self.time_label.place(x=40,y=350)
 
@@ -597,11 +584,9 @@ class GUI_Typing(tk.Frame):
     def back_main_button(self,event):
         GUI_Main(master = self.master)
 
-    #キー入力時のイベント処理
     def type_event(self, event):
         if self.start_button_flag == True:
             if self.flg == True:
-                #入力値がEnterの場合は答え合わせ
                 if event.keysym == "Return":
                     if self.q_label2["text"] == self.ans_label2["text"]:
                         sound = lambda: winsound.PlaySound("dataset/pinpon.wav", winsound.SND_FILENAME)
@@ -616,11 +601,8 @@ class GUI_Typing(tk.Frame):
                         thread_playsound_atti.start()
                         self.result_label.configure(text="ブブー！", fg="blue")
 
-
-                    #解答欄をクリア
                     self.ans_label2.configure(text="")
 
-                    #次の問題を出題
                     self.index += 1
                     if self.correct_cnt == 10:
                         self.flg = False
@@ -628,11 +610,7 @@ class GUI_Typing(tk.Frame):
                         thread_playsound_atti = threading.Thread(target = sound)
                         thread_playsound_atti.start()
                         second_score = self.second
-                        #print(second_score)
                         write_score(2,second_score)
-                        #self.q_label2.configure(text="終了！")
-                        #messagebox.showinfo("リザルト", f"あなたのスコアは{self.correct_cnt}/{self.index}問正解です。")
-                        #sys.exit(0)
 
                     self.index2 = random.randint(0,14)
                     self.q_label2.configure(text=QUESTION[self.index2])
@@ -641,7 +619,6 @@ class GUI_Typing(tk.Frame):
                     text = self.ans_label2["text"]
                     self.ans_label2["text"] = text[:-1]
                 else:
-                    #入力値がEnter以外の場合は文字入力としてラベルに追記する
                     self.ans_label2["text"] += event.keysym
 
     def timer(self):
@@ -681,7 +658,7 @@ class GUI_Face(tk.Frame):
         self.create_widgets()
 
         self.cap = cv2.VideoCapture(0)
-        self.capread()#処理を軽くするために事前にreadしておく
+        self.capread()
 
     def end():
         root.destroy()
@@ -744,7 +721,7 @@ class GUI_Face(tk.Frame):
 
 
     def start_timer(self,event):
-        self.start_state()#初期化
+        self.start_state()
         self.text1.set("合った回数は："+ str(self.match_count)+"　/　勝負回数は：" + str(self.face_game_count))
         self.playsound()
         self.after(500,self.random_img)
@@ -784,7 +761,7 @@ class GUI_Face(tk.Frame):
 
     def random_img(self):
         self.index = random.randint(0,3)
-        self.canvas1.delete('im')#一旦削除してimgを上書き
+        self.canvas1.delete('im')
         if self.index == 0:
             self.canvas1.create_image(30,30,image=self.img_happy, anchor = tk.NW,tag = 'im')
         elif self.index == 1:
@@ -794,7 +771,7 @@ class GUI_Face(tk.Frame):
         else:
             self.canvas1.create_image(30,30,image=self.img_surprise, anchor = tk.NW,tag = 'im')
 
-    def match_face(self):#mediapipe
+    def match_face(self):
         global index
         self.ret, self.rgb = self.cap.read()
         self.gray = cv2.cvtColor(self.rgb, cv2.COLOR_RGB2GRAY)
@@ -827,13 +804,13 @@ class GUI_Face(tk.Frame):
                     return round(eye_ear, 3)
                 smile = calc_smile(self.face_parts[48:68])
                 mouth2 = mouth2_value(self.face_parts[48:68])
-                left_eye_ear = calc_ear(self.face_parts[42:48])#左目の振り分け番号
-                right_eye_ear = calc_ear(self.face_parts[36:42])#右眼の振り分け番号
+                left_eye_ear = calc_ear(self.face_parts[42:48])
+                right_eye_ear = calc_ear(self.face_parts[36:42])
 
                 a = distance.euclidean(self.face_parts[37],self.face_parts[49])
                 b = distance.euclidean(self.face_parts[46],self.face_parts[55])
-                c = (a*b)/(a+b)#笑顔のもとになる値
-                if mouth2 > 10 and (left_eye_ear + right_eye_ear) < 0.35:#あくび判定
+                c = (a*b)/(a+b)
+                if mouth2 > 10 and (left_eye_ear + right_eye_ear) < 0.35:
                     self.face_value = 2
                     self.text2.set("cry")
                     break
@@ -841,15 +818,15 @@ class GUI_Face(tk.Frame):
                     self.face_value = 1
                     self.text2.set("angry")
                     break
-                elif mouth2 > 10 and (left_eye_ear + right_eye_ear) > 0.35:#あくび判定
+                elif mouth2 > 10 and (left_eye_ear + right_eye_ear) > 0.35:
                     self.face_value = 3
                     self.text2.set("surprise")
                     break
-                elif smile > c and mouth2 < 15:#スマイル判定
+                elif smile > c and mouth2 < 15:
                     self.face_value = 0
                     self.text2.set("smile")
                     break
-                elif (end_time-start_time > 1.0):#１秒後にbreak
+                elif (end_time-start_time > 1.0):
                     break
             if self.face_value == self.index:
                 self.match_state()
@@ -861,7 +838,7 @@ class GUI_Face(tk.Frame):
 
 def main():
     root = tk.Tk()
-    app = GUI_Main(master=root)#Inherit
+    app = GUI_Main(master=root)
 
     app.mainloop()
 
