@@ -518,7 +518,7 @@ class GUI_Atti(tk.Frame):
                     self.hand_value = 2
                     self.text2.set("左です")
                     print("left")
-                elif(0.9 > self.y_index_finger > 0.6 and 0.9 > self.x_index_finger > 0.6):#判定がしびあ
+                elif(0.9 > self.y_index_finger > 0.6 and 0.9 > self.x_index_finger > 0.6):
                     self.hand_value = 3
                     self.text2.set("右です")
                     print("right")
